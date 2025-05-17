@@ -14,8 +14,22 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-
 model User {
-  id Int @id @default(autoincrement())
-  name String
+  id      String     @id @default(uuid())
+  name    String
+  //FieldName typeofField attributes 
+  email   String
+  isAdmin Boolean
+  posts   Post[] //one user can have many posts , but one post cannot have many users
+}
+
+model Post {
+  id        Int      @id @default(autoincrement())
+  rating    Float
+  createdAt DateTime
+  updatedAt DateTime
+
+  // relationship -> means, autherID in post table and id in user table are the same 
+  auther   User @relation(fields: [autherId], references: [id])
+  autherId String
 }
