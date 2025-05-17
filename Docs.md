@@ -7,4 +7,4 @@
 3. ` npm i @prisma/client OR npx prisma generate ` -> it deals with interact with the database, write queries
 
 
-
+[](https://www.youtube.com/watch?v=RebA5J-rlwg&t=1996s)

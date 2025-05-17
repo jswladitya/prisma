@@ -32,9 +32,12 @@ async function main() {
 
   const getUsers = await prisma.user.findMany(); //get all the users from the table user
 
-  const delUsers = await prisma.user.deleteMany(); //delete all the users from the table user
+  const delUsers = await prisma.user.deleteMany(); //delete all the users from the table user, for delete (one user) similar to update
 
-
+  const updateUser = await prisma.user.update({
+    where :{}, // find the user first
+    data: {} //then update any of its field
+  })
 }
 
 main().catch((e) => {
