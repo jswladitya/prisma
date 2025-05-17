@@ -1,9 +1,3 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
-// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
-// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
-
 generator client {
   provider = "prisma-client-js"
   output   = "../generated/prisma"
@@ -15,21 +9,51 @@ datasource db {
 }
 
 model User {
-  id      String     @id @default(uuid())
+  id      String  @id @default(uuid())
   name    String
   //FieldName typeofField attributes 
-  email   String
+  email   String  @unique
   isAdmin Boolean
   posts   Post[] //one user can have many posts , but one post cannot have many users
+
+  userPreference UserPreference? //one user can have one Userpreference
+
+  role Role @default(BASIC)
 }
 
 model Post {
   id        Int      @id @default(autoincrement())
   rating    Float
-  createdAt DateTime
-  updatedAt DateTime
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt //everytime we update something , this field gets updated
 
   // relationship -> means, autherID in post table and id in user table are the same 
-  auther   User @relation(fields: [autherId], references: [id])
-  autherId String
+  auther     User       @relation(fields: [autherId], references: [id])
+  autherId   String
+  categories Category[]
 }
+
+model Category {
+  id    String @id @default(uuid())
+  name  String @unique
+  posts Post[]
+}
+
+// NOTE : many to many relationships are simples -> like one category can have many posts and vice versa
+
+// NOTE : one to one (one user can have only one unique userPreference and one userPreference can be of one user)
+model UserPreference {
+  id          String  @id @default(uuid())
+  emailUpdate Boolean
+  user        User    @relation(fields: [userId], references: [id])
+  userId      String  @unique
+}
+
+//enums -> options 
+//now user be be of role either BASIC OR ADMIN
+enum Role {
+  BASIC
+  ADMIN
+}
+
+// now, after writing schemas just migrate ,so that your DB can have all the info regarding schemas
