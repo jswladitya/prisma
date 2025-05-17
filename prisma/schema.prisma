@@ -56,4 +56,4 @@ enum Role {
   ADMIN
 }
 
-// now, after writing schemas just migrate ,so that your DB can have all the info regarding schemas
+// now, after writing schemas just migrate and generate,so that your DB can have all the info regarding schemas

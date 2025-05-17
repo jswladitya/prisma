@@ -1,22 +1,42 @@
 import { PrismaClient } from "@prisma/client";
 
-const prisma = new PrismaClient()
+const prisma = new PrismaClient();
 // now i can use the client to interact with the database
 
+async function main() {
+  // prisma.user -> user represents the user table i created in schema
+  await prisma.user.create({
+    data: {
+      name : "aditya",
+      email : "aditya@gmail.com",
 
-async function main(){
-    // prisma.user -> user represents the user table i created in schema 
-    const user = await prisma.user.create({newUserdata : {name:"aditya"}})
+      //if table is referencing some other field of some other table 
+      userPreference : {
+        create:{
+          emailUpdates : true
+        }
+      }
+    },
+  })
 
-    const users = await prisma.user.findMany() //get all the users from the table user
+  const user = await prisma.user.findUniqe({
+    where : {
+      email : "aditya@gmail.com"
+    },
+    include : {
+      //will find that user and prints all the info about it mentioned in schema except the field it is referecing, plus  
+      //with include field, it will also include userPreference too with all the user info 
+      userPreference : true
+    }
+  })
 
-    
+  const getUsers = await prisma.user.findMany(); //get all the users from the table user
 
+  const delUsers = await prisma.user.deleteMany(); //delete all the users from the table user
 
 
 }
 
-main()
-.catch(e => {
-    console.log(e.message)
-})
+main().catch((e) => {
+  console.log(e.message);
+});
